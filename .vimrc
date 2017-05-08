@@ -1,8 +1,11 @@
 set nocompatible              " be iMproved, required
-syntax on
+syntax enable
 filetype off                  " required
-let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/.ycm_extra_config.py'
 " set the runtime path to include Vundle and initialize
+set backupdir=~/.vim/backups
+set directory=~/.vim/swapfiles
+
+let g:ycm_global_ycm_extra_conf = "~/.vim/.ycm_extra_conf.py"
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 " alternatively, pass a path where Vundle should install plugins
@@ -13,6 +16,7 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'felixhummel/setcolors.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'altercation/vim-colors-solarized'
+Plugin 'flazz/vim-colorschemes'
 Plugin 'Valloric/YouCompleteMe'
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
@@ -37,7 +41,6 @@ filetype plugin indent on    " required
 
 "call pathogen#runtime_append_all_bundles()
 
-filetype plugin indent on
 
 set modelines=0
 
@@ -69,6 +72,7 @@ set incsearch
 set showmatch
 set hlsearch
 colorscheme Tomorrow-Night-Eighties
+
 "set list
 "set listchars=tab:\ ,eol:
 nnoremap <up> <nop>

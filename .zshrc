@@ -53,4 +53,3 @@ compinit
 alias ls='ls --color=auto'
 alias vi='vim'
 bindkey '^H' backward-kill-word
-alias config='/usr/bin/git --git-dir=/home/BioMyth/.cfg/ --work-tree=/home/BioMyth'
