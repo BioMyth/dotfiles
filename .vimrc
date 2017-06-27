@@ -84,6 +84,7 @@ inoremap <down> <nop>
 inoremap <left> <nop>
 inoremap <right> <nop>
 command Q q!
+command! W w !sudo tee % > /dev/null
 command Tree NERDTree
 "command tree NERDTree
 "map ; :
