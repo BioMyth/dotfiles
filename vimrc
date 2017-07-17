@@ -18,7 +18,7 @@ Plugin 'felixhummel/setcolors.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'flazz/vim-colorschemes'
-"Plugin 'Valloric/YouCompleteMe'
+Plugin 'Valloric/YouCompleteMe'
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
 
@@ -95,8 +95,9 @@ command Tree NERDTree
 " commands to enable control+s saves
 silent !stty -ixon
 autocmd VimLeave * silent !stty ixon
+autocmd BufWritePre * :%s/\s\+$//e
 map <C-s> :w<CR> :echo "Saved" <CR>
-imap <C-s> <Esc> :w <CR> :echo "Saved" <CR> i 
+imap <C-s> <Esc> :w <CR> :echo "Saved" <CR> i
 imap <C-x> <Esc>
 "map <C-S> :wq<CR>
 "imap <C-S> <Esc> :wq<CR>
