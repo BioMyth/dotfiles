@@ -1,90 +1,56 @@
-set nocompatible              " be iMproved, required
-syntax enable
-filetype off                  " required
 " set the runtime path to include Vundle and initialize
 set backupdir=~/.vim/backups
 set directory=~/.vim/swapfiles
 set undodir=~/.vim/undofiles
+set runtimepath^=~/.vim runtimepath+=~/.vim/after
 
-let g:ycm_global_ycm_extra_conf = "~/.vim/.ycm_extra_conf.py"
-set rtp+=~/.vim/bundle/Vundle.vim
-call plug#begin()
+call plug#begin('~/.vim/plugged')
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
 
 " let Vundle manage Vundle, required
+Plug 'VundleVim/Vundle.vim'
 Plug 'felixhummel/setcolors.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'altercation/vim-colors-solarized'
 Plug 'flazz/vim-colorschemes'
-Plug 'Valloric/YouCompleteMe'
+Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
 " The following are examples of different formats supported.
-" Keep Plugin commands between vundle#begin/end.
-
 
 " All of your Plugins must be added before the following line
 call plug#end()            " required
 
-filetype plugin indent on    " required
-
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
-"
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
-
-"call pathogen#runtime_append_all_bundles()
-
+let g:deoplete#enable_at_startup = 1
 
 set modelines=0
 
-set tabstop=4
+set expandtab
 set shiftwidth=4
 set softtabstop=4
-set expandtab
+set tabstop=4
 
+set cursorline
 set encoding=utf-8
-set scrolloff=3
-set autoindent
-set showmode
-set showcmd
 set hidden
+set laststatus=2
+set scrolloff=3
+set showmode
+set ttyfast
+set undofile
+set visualbell
 set wildmenu
 set wildmode=list:longest
-set visualbell
-set cursorline
-set ttyfast
-set ruler
-set backspace=indent,eol,start
-set laststatus=2
-set undofile
-
+set number
 set nowrap
 
 set ignorecase
 set smartcase
 " set gdefault
-set incsearch
 set showmatch
-set hlsearch
 colorscheme evening
 
-"set list
-"set listchars=tab:\ ,eol:
-"nnoremap <up> <nop>
-"nnoremap <down> <nop>
-"nnoremap <left> <nop>
-"nnoremap <right> <nop>
-"inoremap <up> <nop>
-"inoremap <down> <nop>
-"inoremap <left> <nop>
-"inoremap <right> <nop>
+set list
+"set listchars=tab:>-,eol:$
 command Q q!
 command! W w !sudo tee % > /dev/null
 command Tree NERDTree
@@ -109,3 +75,26 @@ nmap 6 :b6<CR>
 nmap 7 :b7<CR>
 nmap 8 :b8<CR>
 nmap 9 :b9<CR>
+
+function! NrBufs()
+    return len(filter(range(1, bufnr('$')), 'buflisted(v:val)'))
+endfunction
+
+set statusline=
+set statusline+=%#keyword#
+set statusline+=%F "filepath
+set statusline+=%#string#
+set statusline+=[%{strlen(&fenc)?&fenc:'none'}, "file encoding
+set statusline+=%{&ff}] "file format
+set statusline+=%h "help file flag
+set statusline+=%#error#
+set statusline+=%m "modified flag
+set statusline+=%r "read only flag
+"set statusline+=%y "filetype
+set statusline+=%#keyword#
+set statusline+=%= "left/right separator
+set statusline+=%#class#
+set statusline+=%c, "cursor column
+set statusline+=%l/%L\  "cursor line / total lines
+set statusline+=%n:%{NrBufs()}\ "adds in the buffer number
+
