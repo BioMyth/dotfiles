@@ -17,13 +17,20 @@ case $- in
 esac
 
 
-# Termus Handling 
+# Termux Handling 
 case "$PREFIX" 
 	in
 	*com.termux*)
 	alias ssh=ssha
+	export PATH="${PATH}:~/rish/"
 	;;
 esac
+
+if command -v keychain &> /dev/null 
+then
+	eval $(keychain --eval --quiet id_ed25519)
+fi
+
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
