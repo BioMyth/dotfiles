@@ -28,8 +28,11 @@ esac
 
 if command -v keychain &> /dev/null 
 then
-	eval $(keychain --eval --quiet --noask id_ed25519)
+	eval $(keychain --eval --quiet --noask)
 fi
+
+# Generic alais that stores the ssh keys per usage in the ssh agent
+alias ssh='[[ `ssh-add -l` == "The agent has no identities." ]] && ssh-add; ssh'
 
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
@@ -136,4 +139,10 @@ if ! shopt -oq posix; then
   fi
 fi
 
-eval "$(mcfly init bash)"
+
+# Run Mcfly for a better command history via ctr+r
+if command -v mcfly &> /dev/null 
+then
+	eval "$(mcfly init bash)"
+fi
+
