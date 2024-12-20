@@ -65,6 +65,17 @@ HISTFILESIZE=20000
 ## Better defaults for less
 export LESS="-F -i -J -M -R -x4 -z-4"
 
+## Set system editor by personal preference
+if exists nvim; then
+	EDITOR=nvim
+elif exists vim; then
+	EDITOR=vim
+elif exists vi; then
+	EDITOR=vi
+else
+	EDITOR=nano
+fi
+
 ## Set colors for less.
 ## https://wiki.archlinux.org/index.php/Color_output_in_console#less
 export LESS_TERMCAP_md=$'\e[1;31m'     # begin bold
