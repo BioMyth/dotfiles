@@ -34,16 +34,16 @@ exists() {
 ## Start McFly for a better command history via ctr+r
 if exists mcfly; then
 	eval "$(mcfly init bash)"
-else
-	echo "mcfly missing on system may want to install"
+#else
+	#echo "mcfly missing on system may want to install"
 fi
 
 
 ## Start keychain for ssh key management
 if exists keychain; then
 	eval $(keychain --eval --quiet --noask)
-else
-	echo "keychain missing on system may want to install"
+#else
+	#echo "keychain missing on system may want to install"
 fi
 
 ## make less more friendly for non-text input files, see lesspipe(1)
@@ -142,6 +142,7 @@ unset color_prompt force_color_prompt
 case "$TERM" in
 xterm*|rxvt*)
     PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}: $PWD/$HOME/~}\007"'
     ;;
 *)
     ;;
