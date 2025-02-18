@@ -13,6 +13,12 @@ case "$PREFIX"
 
 esac
 
+# Helper Functions
+
+exists() {
+	command -v "$1" >/dev/null 2>&1
+}
+
 # Fixes an issue where the columns is calculated as 1 extra
 alias man='MANWIDTH=$(expr $COLUMNS - 1) man'
 

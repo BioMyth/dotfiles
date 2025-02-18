@@ -1,3 +1,6 @@
+neovim/config/nvim/.neovim-files/*
+*lazy-lock.json
+*.bak
 vim/swapfiles/*
 vim/undofiles/*
 vim/backups/*
