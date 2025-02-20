@@ -19,8 +19,8 @@ esac
 # Import Other Files
 
 ## Load alias definitions.
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
+if [ -f ~/.aliases ]; then
+    . ~/.aliases
 fi
 
 # Helper Functions
@@ -163,4 +163,4 @@ if ! shopt -oq posix; then
   fi
 fi
 
-
+#tmux
