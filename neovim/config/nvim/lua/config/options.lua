@@ -1,10 +1,19 @@
+-- Helper Functions
+--
+local function defaultValue(value, default)
+    if (value == nil or value == '') then
+        return default
+    end
+    return value
+end
+
 local colorscheme = "evening"
 
 
 local indent = 4
 
-local home = os.getenv("HOME")
-local dataDir = home .. "/.config/nvim/.neovim-files/"
+local configDir = defaultValue(os.getenv("XDG_CACHE_HOME"), os.getenv("HOME") .. "/.cache/")
+local dataDir = configDir .. "nvim/"
 
 vim.cmd("colorscheme " .. colorscheme)
 

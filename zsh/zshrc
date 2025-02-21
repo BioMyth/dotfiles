@@ -10,7 +10,7 @@ exists() {
 autoload -Uz promptinit
 promptinit
 #prompt adam1
-PROMPT=' %(!.%F{red}.%F{cyan})%~'$'\n'' %(?.%F{cyan}.%F{red})'$'\U25CF'' %(!.#.$)%f ' 
+PROMPT=$' %(!.%F{red}.%F{cyan})%~\n %(?.%F{cyan}.%F{red})\U25CF %(!.#.$)%f ' 
 #RPROMPT='%(?.%F{cyan}.%F{red})'$'\U25CF'
 
 # Pull in aliases
