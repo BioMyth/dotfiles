@@ -27,13 +27,17 @@ vim.g.mapleader = " " -- Make sure to set `mapleader` before lazy so your mappin
 
 vim.g.maplocalleader = "\\"
 
-require("lazy").setup({
+local lazy = require("lazy")
+
+lazy.setup({
 	spec = {
 		{ import = "plugins" },
 	},
 	--install = { colorscheme = {"evening"}},
 	checker = {enabled = true}
 })
+
+--lazy.update()
 
 
 function prerequire(...)
@@ -54,15 +58,15 @@ else
     {"Mason not found"}}, true, {})
 end
 
-local lspConfig = prerequire("lspconfig")
+--[[local lspConfig = prerequire("lspconfig")
 
 if(lspConfig) then
-	lspConfig.clangd.setup({})
+    lspConfig.clangd.setup({})
 else
 		vim.api.nvim_echo({
 			{"LSPConfig not found"},
 		}, true, {})
 	 
-end
+end ]]--
 
 --require("mason-lspconfig").clangd.setup{}

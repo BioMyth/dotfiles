@@ -1,5 +1,10 @@
-# ~/.bash_aliases: All aliases configured for bash to use
+# ~/.aliases: All aliases configured for bash to use
 
+# Helper Functions
+
+exists() {
+    command -v "$1" >/dev/null 2>&1
+}
 
 # Improve ssh/ssh-agent handling of ssh keys that are used
 case "$PREFIX" in
@@ -14,11 +19,6 @@ case "$PREFIX" in
 
 esac
 
-# Helper Functions
-
-exists() {
-    command -v "$1" >/dev/null 2>&1
-}
 
 # Fixes an issue where the columns is calculated as 1 extra
 alias man='MANWIDTH=$(expr $COLUMNS - 1) man'

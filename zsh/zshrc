@@ -7,10 +7,30 @@ exists() {
 
 # Set up the prompt
 
+coloredBlock() {
+    local bgColor = $3
+    local text = $2
+    eval "$1=%K{$bgColor}$text%F{$bgColor}\UE0B0%F%K'"
+}
+
+local endBlockChar="\UE0B0"
+
 autoload -Uz promptinit
 promptinit
 #prompt adam1
-PROMPT=$' %(!.%F{red}.%F{cyan})%~\n %(?.%F{cyan}.%F{red})\U25CF %(!.#.$)%f ' 
+PROMPT=$' %K{yellow} %(!.%F{red}.%F{cyan})%~ %K%F{yellow}\UE0B0%K\n %(?.%F{cyan}.%F{red})\U25CF %(!.#.$)%f ' 
+
+# Setup block
+PROMPT='%K{green}'
+# Set color for text
+PROMPT+=' %(!.%F{red}.%F{black})%~ '
+# End the block
+PROMPT+=$'%k%F{green}\UE0B0%f'
+PROMPT+=$'\n'
+# Handle the last run command status
+PROMPT+=$' %(?.%F{green}.%F{red})\U25CF '
+PROMPT+="%(!.#.$)%f "
+#coloredBlock(PROMPT, '%(!.%F{red}.%F{cyan})%~%F', 'yellow')
 #RPROMPT='%(?.%F{cyan}.%F{red})'$'\U25CF'
 
 # Pull in aliases
@@ -20,7 +40,10 @@ fi
 
 
 # Use vi/vim/nvim keybindings
-bindkey -v
+#bindkey -v
+
+# Use Emacs keybindings (Prevents annoyances of not knowing the current mode)
+bindkey -e
 
 # Update ctrl+backspace to delete a word
 bindkey '^H' backward-kill-word
@@ -63,6 +86,34 @@ zstyle :compinstall filename '/home/BioMyth/.zshrc'
 autoload -Uz compinit
 compinit
 
+# Setup to reset the terminal state in the case of a broken command leaving some formatting behind
+autoload -Uz add-zsh-hook
+
+function reset_broken_terminal() {
+    printf '%b' '\e[0m\e(B\e)0\017\e[?5l\e7\e[0;0r\e8'
+}
+
+add-zsh-hook -Uz precmd reset_broken_terminal
+
+# Automatically load in new binaries after they are added, Uses unallocated sigterm call
+
+TRAPUSR1() {rehash}
+
+# Auto source all plugins
+
+source $(find /usr/share/zsh/plugins/*/*.zsh -type f)
+
+
 if exists mcfly; then
     eval "$(mcfly init zsh)"
+fi
+
+#if exists zellij; then
+#    if [[ -z "$ZELLIJ_SESSION_NAME" ]]; then
+#        zellij attach -c $USER@$(hostname)
+#    fi
+#fi
+
+if exists tmux && [ -n "${DISPLAY}" ] && [ -z "${TMUX}" ]; then
+    exec tmux new-session -A -s ${USER} > /dev/null 2>&1
 fi
