@@ -19,12 +19,25 @@ local endBlockChar="\UE0B0"
 
 promptinit
 
+export SESSION_TYPE='local/zsh'
+
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+    SESSION_TYPE='remote/ssh'
+else
+    case $(ps -o comm=-p "$PPID") in
+        sshd|*/sshd) SESSION_TYPE='remote/ssh';;
+    esac
+fi
 
 #prompt adam1
 #PROMPT=$' %K{yellow} %(!.%F{red}.%F{cyan})%~ %K%F{yellow}\UE0B0%K\n %(?.%F{cyan}.%F{red})\U25CF %(!.#.$)%f ' 
 
 # Setup block
 PROMPT='%K{green}'
+if [ "$SESSION_TYPE" = "remote/ssh" ]; then
+    PROMPT+=' SSH '
+fi
+
 # Set color for text
 PROMPT+=' %(!.%F{red}.%F{black})%~ '
 # End the block
