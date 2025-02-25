@@ -1,0 +1,14 @@
+#Install To /etc/systemd/system/tmux@.service
+
+[Unit]
+Description=tmux session for user %I
+
+[Service]
+Type=forking
+User=%I
+# WARNING: Use %I instead of %u here; %u=root in system services
+ExecStart=/usr/bin/tmux new-session -s %I -d
+ExecStop=/usr/bin/tmux kill-session -t %i
+
+[Install]
+WantedBy=multi-user.target

@@ -1,9 +1,11 @@
 # Helper Functions
 
-exists() {
+function __exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
+autoload -Uz add-zsh-hook
+autoload -Uz promptinit
 
 # Set up the prompt
 
@@ -15,23 +17,40 @@ coloredBlock() {
 
 local endBlockChar="\UE0B0"
 
-autoload -Uz promptinit
 promptinit
+
+
 #prompt adam1
-PROMPT=$' %K{yellow} %(!.%F{red}.%F{cyan})%~ %K%F{yellow}\UE0B0%K\n %(?.%F{cyan}.%F{red})\U25CF %(!.#.$)%f ' 
+#PROMPT=$' %K{yellow} %(!.%F{red}.%F{cyan})%~ %K%F{yellow}\UE0B0%K\n %(?.%F{cyan}.%F{red})\U25CF %(!.#.$)%f ' 
 
 # Setup block
 PROMPT='%K{green}'
 # Set color for text
 PROMPT+=' %(!.%F{red}.%F{black})%~ '
 # End the block
-PROMPT+=$'%k%F{green}\UE0B0%f'
+PROMPT+=$'%F{green}%k\UE0B0%f'
 PROMPT+=$'\n'
 # Handle the last run command status
 PROMPT+=$' %(?.%F{green}.%F{red})\U25CF '
 PROMPT+="%(!.#.$)%f "
 #coloredBlock(PROMPT, '%(!.%F{red}.%F{cyan})%~%F', 'yellow')
 #RPROMPT='%(?.%F{cyan}.%F{red})'$'\U25CF'
+
+
+# Set Title
+function __setTitleCmd() {
+    local newTitle="${1:-%2~}"
+    echo -n -e "\033]0;$1\007" 
+}
+add-zsh-hook -Uz precmd __setTitleCmd
+
+function __setTitleExec() {
+
+}
+add-zsh-hook -Uz preexec __setTitleExec
+
+
+
 
 # Pull in aliases
 if [ -f $HOME/.aliases ]; then
@@ -58,6 +77,8 @@ setopt appendhistory autocd extendedglob
 # Don't allow for an audio bell
 unsetopt beep
 
+
+# Set title
 
 # Use modern completion system
 autoload -Uz compinit
@@ -87,13 +108,12 @@ autoload -Uz compinit
 compinit
 
 # Setup to reset the terminal state in the case of a broken command leaving some formatting behind
-autoload -Uz add-zsh-hook
 
-function reset_broken_terminal() {
+function __reset_broken_terminal() {
     printf '%b' '\e[0m\e(B\e)0\017\e[?5l\e7\e[0;0r\e8'
 }
 
-add-zsh-hook -Uz precmd reset_broken_terminal
+add-zsh-hook -Uz precmd __reset_broken_terminal
 
 # Automatically load in new binaries after they are added, Uses unallocated sigterm call
 
@@ -104,16 +124,19 @@ TRAPUSR1() {rehash}
 source $(find /usr/share/zsh/plugins/*/*.zsh -type f)
 
 
-if exists mcfly; then
+if __exists mcfly; then
     eval "$(mcfly init zsh)"
 fi
 
-#if exists zellij; then
+#if __exists zellij; then
 #    if [[ -z "$ZELLIJ_SESSION_NAME" ]]; then
 #        zellij attach -c $USER@$(hostname)
 #    fi
 #fi
 
-if exists tmux && [ -n "${DISPLAY}" ] && [ -z "${TMUX}" ]; then
-    exec tmux new-session -A -s ${USER} > /dev/null 2>&1
+if __exists tmux && [ -n "${DISPLAY}" ] && [ -z "${TMUX}" ]; then
+    exec tmux new-session -A -s "$USER" > /dev/null 2>&1
 fi
+#if __exists zellij; then
+#    eval "$(zellij setup --generate-auto-start zsh)"
+#fi

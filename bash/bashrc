@@ -3,11 +3,11 @@
 # for examples
 
 # Launch Zsh
-if [ -t 1 ]; then
-  if type "zsh" &> /dev/null; then
-    exec zsh
-  fi
-fi
+#if [ -t 1 ]; then
+#  if type "zsh" &> /dev/null; then
+#    exec zsh
+#  fi
+#fi
 
 
 # If not running interactively, don't do anything
