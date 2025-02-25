@@ -26,6 +26,7 @@ statusLine = statusLine .. "%#string#"
 statusLine = statusLine .. "%="
 
 statusLine = statusLine .. "%#keyword#"
+statusLine = statusLine .. "\u{E0B2}"
 statusLine = statusLine .. "%#class#"
 
 -- Cursor character

@@ -1,0 +1,9 @@
+mcfly
+neovim
+zsh
+zsh-autosuggestions
+zsh-completions
+zsh-syntax-highlighting
+tmux
+foot
+

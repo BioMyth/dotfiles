@@ -57,6 +57,13 @@ if [ -f $HOME/.aliases ]; then
     source $HOME/.aliases
 fi
 
+# Load up ssh agent
+if exists keychain; then
+	eval $(keychain --eval --quiet --noask)
+#else
+	#echo "keychain missing on system may want to install"
+fi
+
 
 # Use vi/vim/nvim keybindings
 #bindkey -v
@@ -123,6 +130,16 @@ TRAPUSR1() {rehash}
 
 source $(find /usr/share/zsh/plugins/*/*.zsh -type f)
 
+
+# Setup software to run
+
+if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+  ssh-agent -t 1h > "$XDG_RUNTIME_DIR/ssh-agent.env"  
+fi
+
+if [[ ! -f "$SSH_AUTH_SOCK" ]]; then
+    source "$XDG_RUNTIME_DIR/ssh-agent.env" > /dev/null
+fi
 
 if __exists mcfly; then
     eval "$(mcfly init zsh)"

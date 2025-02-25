@@ -15,7 +15,7 @@ local indent = 4
 local configDir = defaultValue(os.getenv("XDG_CACHE_HOME"), os.getenv("HOME") .. "/.cache/")
 local dataDir = configDir .. "nvim/"
 
-vim.cmd("colorscheme " .. colorscheme)
+--vim.cmd("colorscheme " .. colorscheme)
 
 vim.opt.backupdir = dataDir .. "backups"
 vim.opt.directory = dataDir .. "swapfiles"
