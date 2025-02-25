@@ -128,8 +128,10 @@ TRAPUSR1() {rehash}
 
 # Auto source all plugins
 
-source $(find /usr/share/zsh/plugins/*/*.zsh -type f)
-
+for plugin in $(find /usr/share/zsh/plugins/ -maxdepth 2 -type f -name "*.zsh");
+do
+    source "${plugin}"
+done
 
 # Setup software to run
 
