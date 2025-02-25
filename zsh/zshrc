@@ -128,7 +128,7 @@ TRAPUSR1() {rehash}
 
 # Auto source all plugins
 
-for plugin in $(find /usr/share/zsh/plugins/ -maxdepth 2 -type f -name "*.zsh");
+for plugin in $(find /usr/share/zsh/plugins/ -maxdepth 2 -type f -name "*.zsh" 2> /dev/null);
 do
     source "${plugin}"
 done
@@ -153,9 +153,9 @@ fi
 #    fi
 #fi
 
-if __exists tmux && [ -n "${DISPLAY}" ] && [ -z "${TMUX}" ]; then
-    exec tmux new-session -A -s "$USER" > /dev/null 2>&1
-fi
+#if __exists tmux && [ -n "${DISPLAY}" ] && [ -z "${TMUX}" ]; then
+#    exec tmux new-session -A -s "$USER" > /dev/null 2>&1
+#fi
 #if __exists zellij; then
 #    eval "$(zellij setup --generate-auto-start zsh)"
 #fi
