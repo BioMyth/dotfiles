@@ -63,7 +63,7 @@ readarray -d '' install_files < <(find "$dotfile_path/" -maxdepth 2 -mindepth 2 
 install "$HOME/." "${install_files[@]}"
 
 # Find all the directories in config subfolders, they should map to XDG_CONFIG_DIR
-readarray -d '' install_folders < <(find /home/casteels/dotfiles/ -maxdepth 3 -mindepth 3 -path "$dotfile_path/*/config/*" -type d -print0)
+readarray -d '' install_folders < <(find "$dotfile_path/" -maxdepth 3 -mindepth 3 -path "$dotfile_path/*/config/*" -type d -print0)
 
 install "$config_path/" "${install_folders[@]}"
 
