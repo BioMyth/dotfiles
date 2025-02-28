@@ -2,6 +2,7 @@
 
 dry_run=false
 force=false
+
 while getopts dhf: opt; do
     case $opt in
         d) dry_run=true ;;
@@ -36,14 +37,15 @@ function link {
     fi
     
     if [ "$dry_run" = true ]; then
-        :
-    elif [ -d "$source" ]; then
-       # Soft Link directories
-        ln -sb "$source" "$dest";
-    else
-        # Normal files need hard links to be transparent
-        ln -b "$source" "$dest";
+        return;
     fi
+    
+    if [ -e "$dest" ]; then
+        mv "$dest" "$dest.bak"
+    fi
+
+    # Soft Link all so git cannot break connections
+    ln -sb "$source" "$dest";
 }
 
 function install {
