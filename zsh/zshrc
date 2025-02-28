@@ -187,7 +187,8 @@ fi
 #    fi
 #fi
 
-if __exists tmux && [ "$SESSION_TYPE" = 'remote/ssh' ] && [ -n "${DISPLAY}" ] && [ -z "${TMUX}" ]; then
+#if __exists tmux && [ "$SESSION_TYPE" = 'remote/ssh' ] && [ -n "${DISPLAY}" ] && [ -z "${TMUX}" ]; then
+if __exists tmux && [ "$SESSION_TYPE" = 'remote/ssh' ] && [ -z "${TMUX}" ]; then
     exec tmux new-session -A -s "$USER" > /dev/null 2>&1
 fi
 #if __exists zellij; then
