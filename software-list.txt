@@ -6,4 +6,6 @@ zsh-completions
 zsh-syntax-highlighting
 tmux
 foot
+foot-terminfo
+bottom
 

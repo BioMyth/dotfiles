@@ -1,0 +1,55 @@
+# Helper Functions
+
+function __exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+
+# Env exports
+export EDITOR="nvim"
+
+# Detect ssh sessions
+
+export SESSION_TYPE='local/zsh'
+
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+    SESSION_TYPE='remote/ssh'
+else
+    case $(ps -o comm=-p "$PPID") in
+        sshd|*/sshd) SESSION_TYPE='remote/ssh';;
+    esac
+fi
+
+# Setup software to run
+
+## SSH
+
+# Load up ssh agent
+if [ "$SESSION_TYPE" = "remote/ssh" ]; then
+    # Do Nothing
+    :
+elif exists keychain; then
+    eval $(keychain --eval --quiet --noask)
+else
+    if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+        ssh-agent -t 1h > "$XDG_RUNTIME_DIR/ssh-agent.env"  
+    fi
+
+    if [[ ! -f "$SSH_AUTH_SOCK" ]]; then
+        source "$XDG_RUNTIME_DIR/ssh-agent.env" > /dev/null
+    fi
+
+fi
+
+
+if __exists mcfly; then
+    eval "$(mcfly init zsh)"
+fi
+
+#        zellij attach -c $USER@$(hostname)
+#    fi
+#fi
+
+if __exists tmux && [ -n "${DISPLAY}" ] && [ -z "${TMUX}" ] && [ "$SESSION_TYPE" = "remote/ssh" ]; then
+    exec tmux new-session -A -s "$USER@$(hostname)" > /dev/null 2>&1
+fi

@@ -32,12 +32,18 @@ fi
 #prompt adam1
 #PROMPT=$' %K{yellow} %(!.%F{red}.%F{cyan})%~ %K%F{yellow}\UE0B0%K\n %(?.%F{cyan}.%F{red})\U25CF %(!.#.$)%f ' 
 
+# Allow function calls in the prompt string
+setopt PROMPT_SUBST
+
 # Setup block
+
+
 PROMPT='%K{green}'
+
 if [ "$SESSION_TYPE" = "remote/ssh" ]; then
     PROMPT+=' SSH '
 fi
-
+PROMPT+='$(if [ "$SESSION_TYPE" = "remote/ssh" ]; then echo -n " SSH "; fi)'
 # Set color for text
 PROMPT+=' %(!.%F{red}.%F{black})%~ '
 # End the block
@@ -70,11 +76,14 @@ if [ -f $HOME/.aliases ]; then
     source $HOME/.aliases
 fi
 
-# Load up ssh agent
-if exists keychain; then
-	eval $(keychain --eval --quiet --noask)
-#else
-	#echo "keychain missing on system may want to install"
+# Pull in commoon rc
+if [ -f $HOME/.commonrc ]; then
+    source $HOME/.commonrc
+fi
+
+# localrc for anything machine specific
+if [ -f $HOME/.localrc ]; then
+    source $HOME/.localrc
 fi
 
 
@@ -148,13 +157,26 @@ done
 
 # Setup software to run
 
-if ! pgrep -u "$USER" ssh-agent > /dev/null; then
-  ssh-agent -t 1h > "$XDG_RUNTIME_DIR/ssh-agent.env"  
+## SSH
+
+# Load up ssh agent
+
+if [ ! "$SESSION_TYPE" = "remote/ssh" ]; then
+    # Do Nothing
+    :
+elif exists keychain; then
+    eval $(keychain --eval --quiet --noask)
+else
+    if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+        ssh-agent -t 1h > "$XDG_RUNTIME_DIR/ssh-agent.env"  
+    fi
+
+    if [[ ! -f "$SSH_AUTH_SOCK" ]]; then
+        source "$XDG_RUNTIME_DIR/ssh-agent.env" > /dev/null
+    fi
+
 fi
 
-if [[ ! -f "$SSH_AUTH_SOCK" ]]; then
-    source "$XDG_RUNTIME_DIR/ssh-agent.env" > /dev/null
-fi
 
 if __exists mcfly; then
     eval "$(mcfly init zsh)"
@@ -172,3 +194,4 @@ fi
 #if __exists zellij; then
 #    eval "$(zellij setup --generate-auto-start zsh)"
 #fi
+
