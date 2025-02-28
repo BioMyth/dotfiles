@@ -1,11 +1,12 @@
 #!/usr/bin/bash
 
 dry_run=false
+soft_link=false
 
-
-while getopts dh: opt; do
+while getopts dsh: opt; do
     case $opt in
         d) dry_run=true ;;
+        s) soft_link=true ;;
         h) echo "This command installs the provided dotfiles excluding the manual install scripts. Provide -d for a dry run."
             exit 0 ;;
         *) echo "Error in command line parsing parameter provided opt is not an allowed operation" >&2
@@ -28,7 +29,7 @@ function link {
     local source=$1
     local dest=$2
     # If destination exists & is a symbolic or hard link
-    if [ -e "$dest" ] && ( [ -L "$dest" ] || [ $(stat -c '%h' "$dest") > 1 ] ); then
+    if [ -e "$dest" ] && ( [ -L "$dest" ] || [ $(stat -c '%h' -- "$dest") -gt 1 ] ); then
         echo "Skipping $dest already is a symlink";
         return 0;
     else
@@ -38,7 +39,7 @@ function link {
     if [ "$dry_run" = true ]; then
         :
        # Soft Link Directories
-    elif [ -d "$source" ]; then
+    elif [ "$soft_link" = true ] || [ -d "$source" ]; then
         ln -sb "$source" "$dest";
     else
         ln -b "$source" "$dest";
