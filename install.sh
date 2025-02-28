@@ -37,9 +37,12 @@ function link {
     
     if [ "$dry_run" = true ]; then
         :
-    else
-       # Soft Link so git cannot break the links later
+    elif [ -d "$source" ]; then
+       # Soft Link directories
         ln -sb "$source" "$dest";
+    else
+        # Normal files need hard links to be transparent
+        ln -b "$source" "$dest";
     fi
 }
 
