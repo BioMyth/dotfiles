@@ -162,7 +162,7 @@ done
 # Load up ssh agent
 
 
-if [ ! "$SESSION_TYPE" = "remote/ssh" ]; then
+if [ "$SESSION_TYPE" = "remote/ssh" ]; then
     # Do Nothing
     :
 elif exists keychain; then
