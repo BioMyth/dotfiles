@@ -3,7 +3,7 @@
 dry_run=false
 force=false
 
-while getopts dhf: opt; do
+while getopts dfh: opt; do
     case $opt in
         d) dry_run=true ;;
         f) force=true ;;
