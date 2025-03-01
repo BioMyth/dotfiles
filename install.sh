@@ -24,7 +24,7 @@ if [ "$dry_run" = true ]; then
     echo "================================"
 fi
 
-
+# This function handles the linking of the dotfiles to their correct files
 function link {
     local source=$1
     local dest=$2
@@ -41,13 +41,14 @@ function link {
     fi
     
     if [ -e "$dest" ]; then
-        mv "$dest" "$dest.bak"
+        sudo mv "$dest" "$dest.bak"
     fi
 
     # Soft Link all so git cannot break connections
-    ln -sb "$source" "$dest";
+    sudo ln -sb "$source" "$dest";
 }
 
+# This function handles linking an array of files in a directory
 function install {
     local dest_dir="$1"
     shift
@@ -58,15 +59,37 @@ function install {
     done
 }
 
+# Individual installs in the manual_install directory
 
-# Find all top level dotfiles to install
+## Manual install tmux service
+
+install "/etc/systemd/system/" "$dotfile_path/manual_install/tmux@.service"
+
+echo "Starting tmux service"
+
+if [ ! "$dry_run" ]; then
+    systemctl enable --now --user tmux
+fi
+
+## If running an pacman is installed, then install the pacman hook
+if command -v pacman 2>&1 >/dev/null; then
+    install "/etc/pacman.d/hooks/" "$dotfile_path/manual_install/zsh.hook"
+fi
+
+
+# Bare dotfiles in $HOME
+
+## Find all top level dotfiles to install
 readarray -d '' install_files < <(find "$dotfile_path/" -maxdepth 2 -mindepth 2 \( -path "$dotfile_path/.git*" -o -path "$dotfile_path/manual-install*"  -o -name '.*' \) -o -prune -type f -print0 )
 
-# Install the dotfiles
+## Install the dotfiles
 install "$HOME/." "${install_files[@]}"
 
-# Find all the directories in config subfolders, they should map to XDG_CONFIG_DIR
+# Config folders in $XDG_CONFIG_DIR
+
+## Find all the directories in config subfolders, they should map to XDG_CONFIG_DIR
 readarray -d '' install_folders < <(find "$dotfile_path/" -maxdepth 3 -mindepth 3 -path "$dotfile_path/*/config/*" -type d -print0)
 
+## Install the config files
 install "$config_path/" "${install_folders[@]}"
 
