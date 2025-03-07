@@ -24,6 +24,19 @@ if [ "$dry_run" = true ]; then
     echo "================================"
 fi
 
+function __sudo {
+        local firstArg=$1
+        if [ $(type -t $firstArg) = function ]; then
+                
+            shift && command sudo bash -c "$(declare -f $firstArg);$firstArg $*"
+
+        elif [ $(type -t $firstArg) = alias ];then
+            alias sudo='\sudo '
+            eval "sudo $@"
+        else
+            command sudo "$@"
+        fi
+}
 # This function handles the linking of the dotfiles to their correct files
 function link {
     local source=$1
@@ -41,11 +54,13 @@ function link {
     fi
     
     if [ -e "$dest" ]; then
-        sudo mv "$dest" "$dest.bak"
+        #sudo
+        mv "$dest" "$dest.bak"
     fi
 
     # Soft Link all so git cannot break connections
-    sudo ln -sb "$source" "$dest";
+    #sudo 
+    ln -sb "$source" "$dest";
 }
 
 # This function handles linking an array of files in a directory
@@ -63,7 +78,7 @@ function install {
 
 ## Manual install tmux service
 
-install "/etc/systemd/system/" "$dotfile_path/manual_install/tmux@.service"
+__sudo install "/etc/systemd/system/" "$dotfile_path/manual_install/tmux@.service"
 
 echo "Starting tmux service"
 
@@ -73,7 +88,7 @@ fi
 
 ## If running an pacman is installed, then install the pacman hook
 if command -v pacman 2>&1 >/dev/null; then
-    install "/etc/pacman.d/hooks/" "$dotfile_path/manual_install/zsh.hook"
+    __sudo install "/etc/pacman.d/hooks/" "$dotfile_path/manual_install/zsh.hook"
 fi
 
 

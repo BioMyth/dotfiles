@@ -7,7 +7,6 @@ function __exists() {
 
 # Env exports
 export EDITOR="nvim"
-
 # Detect ssh sessions
 
 export SESSION_TYPE='local/zsh'
@@ -31,12 +30,18 @@ if [ "$SESSION_TYPE" = "remote/ssh" ]; then
 elif exists keychain; then
     eval $(keychain --eval --quiet --noask)
 else
+    
+    ssh_agent_file="${XDG_RUNTIME_DIR:-$HOME/.cache}/ssh-agent.env"
+    if [ ! -e "$ssh_agent_file" ]; then
+        touch "$ssh_agent_file"
+    fi
+    
     if ! pgrep -u "$USER" ssh-agent > /dev/null; then
-        ssh-agent -t 1h > "$XDG_RUNTIME_DIR/ssh-agent.env"  
+        ssh-agent -t 1h > "$ssh_agent_file"
     fi
 
     if [[ ! -f "$SSH_AUTH_SOCK" ]]; then
-        source "$XDG_RUNTIME_DIR/ssh-agent.env" > /dev/null
+        source "$ssh_agent_file" > /dev/null
     fi
 
 fi

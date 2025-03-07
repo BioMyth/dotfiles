@@ -6,7 +6,6 @@ function __exists() {
 
 autoload -Uz add-zsh-hook
 autoload -Uz promptinit
-
 # Set up the prompt
 
 coloredBlock() {
@@ -158,23 +157,23 @@ done
 # Load up ssh agent
 
 
-if [ "$SESSION_TYPE" = "remote/ssh" ]; then
+#if [ "$SESSION_TYPE" = "remote/ssh" ]; then
     # Do Nothing
-    :
-elif exists keychain; then
-    eval $(keychain --eval --quiet --noask)
-else
-    ssh_agent_file="${XDG_RUNTIME_DIR:-}/ssh-agent.env"
+#    :
+#elif exists keychain; then
+#    eval $(keychain --eval --quiet --noask)
+#else
+#    ssh_agent_file="${XDG_RUNTIME_DIR:-$HOME/.cache}/ssh-agent.env"
 
-    if ! pgrep -u "$USER" ssh-agent > /dev/null; then
-        ssh-agent -t 1h > "$ssh_agent_file"  
-    fi
+#    if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+#        ssh-agent -t 1h > "$ssh_agent_file"  
+    #fi
 
-    if [[ ! -f "$SSH_AUTH_SOCK" ]]; then
-        source "$ssh_agent_file" > /dev/null
-    fi
+   # if [[ ! -f "$SSH_AUTH_SOCK" ]]; then
+   #     source "$ssh_agent_file" > /dev/null
+   # fi
 
-fi
+#fi
 
 
 if __exists mcfly; then
