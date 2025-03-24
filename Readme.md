@@ -6,9 +6,27 @@ This is a basic repository holding all of my modified dotfiles for ease and port
 * Git
 
 ## Installation
-
+Git pull this repository, then run install.sh.
 
 ## Usage
+
+## Structure
+
+### Application Directories - repo/*
+Application directories are named for the application the configs are relevant for names could also represent anything else.
+### repo/[Application]/*
+Any files within the Application Directories are linked to $HOME/.[file] backing up the existing files. This way the config files in the repo are not hidden files.
+### repo/[Application]/config/
+Anything within an
+### repo/manual-install
+The manual-install directory has custom objects which need their own unique locations & so are defined in the script on their own. So that directory is ignored for the handling above.
+
+### TODO:
+- Would like to re-write the install code in rust/go rather than as a shell utility.
+- Want to include some configuration file support for the manual-install directory handling.
+- Add more command line options to control manual-install runs since that is typically one per machine.
+- Update the directory handling within Application Directories to support non .config directories
+- Update to auto generate the path for the files if they don't exist.
 
 ## Tools
 
