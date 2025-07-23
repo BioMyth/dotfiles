@@ -38,7 +38,7 @@ setopt PROMPT_SUBST
 
 
 PROMPT='%K{green}'
-PROMPT+='$(if [ "$SESSION_TYPE" = "remote/ssh" ]; then echo -n " SSH "; fi)'
+PROMPT+='$(if [ "$SESSION_TYPE" = "remote/ssh" ]; then echo -n " SSH $HOSTNAME "; fi)'
 # Set color for text
 PROMPT+=' %(!.%F{red}.%F{black})%~ '
 # End the block
