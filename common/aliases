@@ -41,11 +41,15 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
+alias q='exit'
+
 
 # If neovim is installed replace vi/vim with neovim
 if exists nvim; then
     alias vim=nvim
     alias vi=nvim
+else
+    alias nvim=vim
 fi
 
 # Better baselines
