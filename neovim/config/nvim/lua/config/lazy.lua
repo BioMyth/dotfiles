@@ -58,6 +58,9 @@ else
     {"Mason not found"}}, true, {})
 end
 
+
+
+
 --[[local lspConfig = prerequire("lspconfig")
 
 if(lspConfig) then

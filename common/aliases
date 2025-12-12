@@ -52,6 +52,10 @@ else
     alias nvim=vim
 fi
 
+if exists sudo-rs; then
+    alias sudo=sudo-rs
+fi
+
 # Better baselines
 # Warn before overwrite
 alias cp="cp -i"

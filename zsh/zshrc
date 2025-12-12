@@ -6,6 +6,12 @@ function __exists() {
 
 autoload -Uz add-zsh-hook
 autoload -Uz promptinit
+
+# Use modern completion system
+autoload -Uz compinit
+compinit
+
+
 # Set up the prompt
 
 coloredBlock() {
@@ -96,7 +102,8 @@ HISTSIZE=1000
 SAVEHIST=1000
 HISTFILE=~/.zsh_history
 # Append to the history, auto cd when entering a folder path
-setopt histignorealldups sharehistory
+setopt histignorealldups inc_append_history_time
+#sharehistory
 setopt appendhistory autocd extendedglob
 # Don't allow for an audio bell
 unsetopt beep
@@ -104,9 +111,13 @@ unsetopt beep
 
 # Set title
 
-# Use modern completion system
-autoload -Uz compinit
-compinit
+# Add support for sudo completion
+zstyle ':completion::complete:*' gain-privileges 1
+
+# Auto detect new completion options
+zstyle ':completion:*' rehash true
+
+# Old section
 zstyle ':completion:*' auto-description 'specify: %d'
 zstyle ':completion:*' completer _expand _complete _correct _approximate
 zstyle ':completion:*' format 'Completing %d'
@@ -126,10 +137,10 @@ zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
 
-zstyle :compinstall filename '/home/BioMyth/.zshrc'
+zstyle :compinstall filename '~/.zshrc'
 
-autoload -Uz compinit
-compinit
+#autoload -Uz compinit
+#compinit
 
 # Setup to reset the terminal state in the case of a broken command leaving some formatting behind
 
@@ -145,37 +156,6 @@ TRAPUSR1() {rehash}
 
 # Auto source all plugins
 
-for plugin in $(find /usr/share/zsh/plugins/ -maxdepth 2 -type f -name "*.zsh" 2> /dev/null);
-do
-    source "${plugin}"
-done
-
-# Setup software to run
-
-## SSH
-
-# Load up ssh agent
-
-
-#if [ "$SESSION_TYPE" = "remote/ssh" ]; then
-    # Do Nothing
-#    :
-#elif exists keychain; then
-#    eval $(keychain --eval --quiet --noask)
-#else
-#    ssh_agent_file="${XDG_RUNTIME_DIR:-$HOME/.cache}/ssh-agent.env"
-
-#    if ! pgrep -u "$USER" ssh-agent > /dev/null; then
-#        ssh-agent -t 1h > "$ssh_agent_file"  
-    #fi
-
-   # if [[ ! -f "$SSH_AUTH_SOCK" ]]; then
-   #     source "$ssh_agent_file" > /dev/null
-   # fi
-
-#fi
-
-
 if __exists mcfly; then
     eval "$(mcfly init zsh)"
 fi
@@ -187,10 +167,23 @@ fi
 #fi
 
 #if __exists tmux && [ "$SESSION_TYPE" = 'remote/ssh' ] && [ -n "${DISPLAY}" ] && [ -z "${TMUX}" ]; then
-if __exists tmux && [ "$SESSION_TYPE" = 'remote/ssh' ] && [ -z "${TMUX}" ]; then
-    exec tmux new-session -A -s "$USER" > /dev/null 2>&1
-fi
+#if __exists tmux && [ "$SESSION_TYPE" = 'remote/ssh' ] && [ -z "${TMUX}" ]; then
+#    exec tmux new-session -A -s "$USER" > /dev/null 2>&1
+#fi
 #if __exists zellij; then
 #    eval "$(zellij setup --generate-auto-start zsh)"
 #fi
 
+if __exists fzf; then
+    source <(fzf --zsh)
+fi
+
+for plugin in $(find /usr/share/zsh/plugins/ -maxdepth 2 -type f -name "*.zsh" 2> /dev/null);
+do
+    source "${plugin}"
+done
+
+
+
+# Created by `pipx` on 2025-09-18 01:30:55
+export PATH="$PATH:/home/casteels/.local/bin"

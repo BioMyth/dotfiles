@@ -7,7 +7,7 @@ local function defaultValue(value, default)
     return value
 end
 
-local colorscheme = "evening"
+local colorscheme = "gruvbox" -- "evening"
 
 
 local indent = 4

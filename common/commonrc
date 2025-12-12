@@ -5,11 +5,34 @@ function __exists() {
 }
 
 
+
 # Env exports
 export EDITOR="nvim"
+
+export PAGER="less"
+
 # Detect ssh sessions
 
-export SESSION_TYPE='local/zsh'
+if test -n "$ZSH_VERSION"; then
+    export PROFILE_SHELL='zsh'
+elif test -n "$BASH_VERSION"; then
+    export PROFILE_SHELL='bash'
+elif test -n "$FISH_VERSION"; then
+    export PROFILE_SHELL='fish'
+elif test -n "$KSH_VERSION"; then
+    export PROFILE_SHELL='ksh'
+elif test -n "$FCEDIT"; then
+    export PROFILE_SHELL='ksh'
+elif test -n "$PS3"; then
+    export PROFILE_SHELL='unknown'
+else
+    export PROFILE_SHELL='sh'
+fi
+
+
+export SESSION_TYPE="local/${PROFILE_SHELL}"
+
+
 
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
     SESSION_TYPE='remote/ssh'
@@ -19,12 +42,24 @@ else
     esac
 fi
 
+
+export HISTFILE="${HOME}/.${PROFILE_SHELL}_history"
+
+
+# Allow each tmux pane to have its own history file
+#if [[ "$TMUX_PANE" ]]; then
+#    export HISTFILE="${HISTFILE}_tmux_${TMUX_PANE:1}"
+#    if [ ! -f "${HISTFILE}" ]; then
+#        touch "${HISTFILE}"
+#    fi
+#fi
+
 # Setup software to run
 
 ## SSH
 
 # Load up ssh agent
-if [ "$SESSION_TYPE" = "remote/ssh" ]; then
+if [ "$SESSION_TYPE" = 'remote/ssh' ]; then
     # Do Nothing
     :
 elif exists keychain; then
@@ -55,6 +90,6 @@ fi
 #    fi
 #fi
 
-if __exists tmux && [ -n "${DISPLAY}" ] && [ -z "${TMUX}" ] && [ "$SESSION_TYPE" = "remote/ssh" ]; then
+if __exists tmux && [ -n "${DISPLAY}" ] && [ -z "${TMUX}" ] && [ "$SESSION_TYPE" = 'remote/ssh' ]; then
     exec tmux new-session -A -s "$USER@$(hostname)" > /dev/null 2>&1
 fi

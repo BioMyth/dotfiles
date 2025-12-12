@@ -1,0 +1,9 @@
+[Unit]
+Description=Git pull the dotfile directory
+
+[Unit]
+Type=oneshot
+ExecStart=/usr/bin/git -C %h/ pull
+
+[Install]
+WantedBy=default.target
