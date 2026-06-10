@@ -1,0 +1,43 @@
+;; A configuration showcasing deflayermap.
+;;
+;; The process-unmapped-keys defcfg item is not used
+;; and the lctl and ralt keys are unmapped
+;; because mapping them can cause problems on Windows
+;; with non-US layouts.
+
+(defcfg
+  process-unmapped-keys yes
+    windows-interception-keyboard-hwids (
+  )
+)
+
+(defsrc
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  caps a    s    d    f    g    h    j    k    l    ;    '    ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+       lmet lalt           spc                 rmet rctl
+)
+(defvar
+  tap-time 200
+  hold-time 200
+)
+
+(deflayermap (base)
+  a  (tap-hold $tap-time $hold-time a lsft)
+  ;  (tap-hold $tap-time $hold-time ; rsft)
+  s  (tap-hold $tap-time $hold-time s lctl)
+  l  (tap-hold $tap-time $hold-time l rctl)
+  d  (tap-hold $tap-time $hold-time d lmet)
+  k  (tap-hold $tap-time $hold-time k rmet)
+
+  f  (tap-hold 200 200 f (layer-while-held nav))
+)
+
+(deflayermap (nav)
+  h left
+  j down
+  k  up
+  l right
+  s lctl
+)
