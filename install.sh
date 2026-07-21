@@ -74,11 +74,11 @@ function install {
     done
 }
 
-# Individual installs in the manual_install directory
+# Individual installs in the manual-install directory
 
 ## Manual install tmux service
 
-__sudo install "/etc/systemd/system/" "$dotfile_path/manual_install/tmux@.service"
+__sudo install "/etc/systemd/system/" "$dotfile_path/manual-install/tmux@.service"
 
 echo "Starting tmux service"
 
@@ -88,7 +88,7 @@ fi
 
 ## If running an pacman is installed, then install the pacman hook
 if command -v pacman 2>&1 >/dev/null; then
-    __sudo install "/etc/pacman.d/hooks/" "$dotfile_path/manual_install/zsh.hook"
+    __sudo install "/etc/pacman.d/hooks/" "$dotfile_path/manual-install/zsh.hook"
 fi
 
 
